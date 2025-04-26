@@ -21,3 +21,8 @@ interface Sale {
   quantity: number;
   unitPrice: Float!;
 }
+
+interface MutationMessage {
+  message: string;
+  success: boolean;
+}

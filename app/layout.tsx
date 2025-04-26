@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Playfair_Display, Poppins } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+// import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@/lib/theme-provider";
 import AppNav from "./components/app-nav";
 
 const poppins = Poppins({
@@ -36,7 +37,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AppNav />
-          {children}
+          <div className="p-3 md:p-4">{children}</div>
         </ThemeProvider>
       </body>
     </html>
