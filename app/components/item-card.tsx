@@ -2,7 +2,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { UpdateItemDialog } from "../items/edit-item-dialog";
-import Delete
+// import Delete
 import DeleteItemDialog from "../items/delete-item-dialog";
 
 const ItemCard = ({ item }: { item: Item }) => {
@@ -36,7 +36,7 @@ const ItemCard = ({ item }: { item: Item }) => {
         <div className="flex gap-2 mt-4">
           {/* <Button className="flex-2/4">Edit</Button> */}
           <UpdateItemDialog item={item} />
-          <DeleteItemDialog item={item}/>
+          <DeleteItemDialog item={item} />
 
           {/* <Button variant="destructive"> */}
           {/*   <TrashIcon /> */}

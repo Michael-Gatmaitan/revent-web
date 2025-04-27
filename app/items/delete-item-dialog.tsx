@@ -15,6 +15,7 @@ import createApolloClient from "@/lib/apollo-client";
 import { DELETE_ITEM } from "@/lib/gql";
 import { TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const DeleteItemDialog = ({ item }: { item: Item }) => {
   const router = useRouter();
@@ -29,10 +30,16 @@ const DeleteItemDialog = ({ item }: { item: Item }) => {
         },
       });
 
-      console.log(data);
+      if (data.deleteItem.success) {
+        toast(data.deleteItem.message, {
+          description: "Item moved in archive.",
+        });
+      }
+
       router.refresh();
     } catch (err) {
       console.log(err);
+      toast("Something went wrong");
     }
   };
 
@@ -53,7 +60,7 @@ const DeleteItemDialog = ({ item }: { item: Item }) => {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={handleDeleteItem}>
-            Continue
+            Delete Item
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

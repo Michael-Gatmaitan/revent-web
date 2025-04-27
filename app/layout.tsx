@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Playfair_Display, Poppins } from "next/font/google";
-// import { ThemeProvider } from "next-themes";
 import { ThemeProvider } from "@/lib/theme-provider";
-import AppNav from "./components/app-nav";
+// import AppNav from "./components/app-nav";
+import { Toaster } from "sonner";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from "./components/app-sidebar";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -36,8 +38,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AppNav />
-          <div className="p-3 md:p-4">{children}</div>
+          <SidebarProvider>
+            <AppSidebar />
+            {/* <AppNav /> */}
+            <div className="p-3 md:p-4">{children}</div>
+            <Toaster />
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

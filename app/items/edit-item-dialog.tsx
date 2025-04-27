@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -15,6 +16,7 @@ import createApolloClient from "@/lib/apollo-client";
 import { UPDATE_ITEM } from "@/lib/gql";
 import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const UpdateItemDialog = ({ item }: { item: Item }) => {
   const router = useRouter();
@@ -24,21 +26,32 @@ export const UpdateItemDialog = ({ item }: { item: Item }) => {
   const [unitPriceVal, setUnitPriceVal] = useState(item.unitPrice);
 
   const handleUpdateItem = async () => {
-    console.log(itemNameText, imageURLText, discountVal);
+    try {
+      const client = createApolloClient();
+      const { data } = await client.mutate({
+        mutation: UPDATE_ITEM,
+        variables: {
+          productID: item.productID,
+          itemName: itemNameText,
+          discount: discountVal,
+          unitPrice: unitPriceVal,
+          imageURL: imageURLText,
+        },
+      });
 
-    const client = createApolloClient();
-    const { data } = await client.mutate({
-      mutation: UPDATE_ITEM,
-      variables: {
-        productID: item.productID,
-        itemName: itemNameText,
-        discount: discountVal,
-        unitPrice: unitPriceVal,
-        imageURL: imageURLText,
-      },
-    });
-    console.log(data);
-    router.refresh();
+      const { message, success } = data.updateItem;
+
+      if (success) {
+        toast(message, {
+          description: "Item updated successfully",
+        });
+      }
+
+      router.refresh();
+    } catch (err) {
+      console.log(err);
+      toast("Something went wrong");
+    }
   };
 
   return (
@@ -111,9 +124,11 @@ export const UpdateItemDialog = ({ item }: { item: Item }) => {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleUpdateItem}>
-            Save changes
-          </Button>
+          <DialogClose asChild>
+            <Button type="submit" onClick={handleUpdateItem}>
+              Save changes
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

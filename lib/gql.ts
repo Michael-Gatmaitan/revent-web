@@ -76,13 +76,12 @@ export const UPDATE_ITEM = gql`
 `;
 
 export const DELETE_ITEM = gql`
-  mutation DeleteItem(
-    $productID: Int!
-  ) {
+  mutation DeleteItem($productID: Int!) {
     deleteItem(productID: $productID) {
       message
       success
     }
+  }
 `;
 
 export const GET_SALES = gql`
