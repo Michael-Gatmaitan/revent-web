@@ -1,14 +1,104 @@
+"use client";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { UpdateItemDialog } from "../items/edit-item-dialog";
 // import Delete
 import DeleteItemDialog from "../items/delete-item-dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useAppDispatch, useAppSelector } from "@/lib/hook";
+import {
+  addItem,
+  addQuantityToItem,
+  removeItem,
+  selectItemData,
+} from "@/lib/features/orderSlice";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { PlusIcon, MinusIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-const ItemCard = ({ item }: { item: Item }) => {
+const ItemCard = ({
+  item,
+  selectMode,
+}: {
+  item: Item;
+  selectMode?: boolean;
+}) => {
+  const dispatch = useAppDispatch();
   const itemImageLocal = `http://localhost/imsa/data/item_images/${item.imageURL}`;
+  const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const [selected, setSelected] = useState(false);
+
+  const alldata = useAppSelector(selectItemData);
+
+  useEffect(() => {
+    console.log(alldata);
+  }, [alldata]);
+
+  useEffect(() => {
+    if (!selected) setSelectedQuantity(0);
+  }, [selected]);
+
+  const handleAddItem = (val: boolean) => {
+    console.log(item, val);
+    setSelected(val);
+
+    if (!val) {
+      // Remove item
+      console.log("REMOVING ITEM`");
+      dispatch(removeItem(item.productID));
+    } else {
+      const { productID, itemName, stock, imageURL, unitPrice } = item;
+      const data = {
+        productID,
+        itemName,
+        stock,
+        imageURL,
+        unitPrice,
+        isChecked: val,
+        selectedQuantity,
+      };
+      dispatch(addItem(data));
+    }
+  };
+
+  const handleAddQuantityToItem = () => {
+    setSelectedQuantity((prev) => prev + 1);
+    console.log(selectedQuantity);
+    dispatch(
+      addQuantityToItem({
+        productID: item.productID,
+        quantity: selectedQuantity + 1,
+      }),
+    );
+  };
+
+  const handleRemoveQuantityToItem = () => {
+    setSelectedQuantity((prev) => prev - 1);
+    console.log(selectedQuantity);
+    dispatch(
+      addQuantityToItem({
+        productID: item.productID,
+        quantity: selectedQuantity - 1,
+      }),
+    );
+  };
+
   return (
     <Card className="p-4">
+      {selectMode ? (
+        <div className="flex justify-between">
+          <Checkbox
+            onCheckedChange={handleAddItem}
+            disabled={item.stock <= 0}
+          />
+          {item.stock <= 0 ? (
+            <Badge variant="destructive">Out of stock</Badge>
+          ) : null}
+        </div>
+      ) : null}
+
       <AspectRatio ratio={1 / 1}>
         <Image
           src={
@@ -33,15 +123,30 @@ const ItemCard = ({ item }: { item: Item }) => {
           </div>
         </div>
 
-        <div className="flex gap-2 mt-4">
-          {/* <Button className="flex-2/4">Edit</Button> */}
-          <UpdateItemDialog item={item} />
-          <DeleteItemDialog item={item} />
-
-          {/* <Button variant="destructive"> */}
-          {/*   <TrashIcon /> */}
-          {/* </Button> */}
-        </div>
+        {selectMode ? (
+          <div className="flex gap-2 mt-8 items-center">
+            <Button
+              onClick={handleAddQuantityToItem}
+              disabled={
+                selectedQuantity === item.stock || !selected || item.stock <= 0
+              }
+            >
+              <PlusIcon />
+            </Button>
+            <div>{selectedQuantity}</div>
+            <Button
+              onClick={handleRemoveQuantityToItem}
+              disabled={selectedQuantity <= 0 || !selected}
+            >
+              <MinusIcon />
+            </Button>
+          </div>
+        ) : (
+          <div className="flex gap-2 mt-4">
+            <UpdateItemDialog item={item} />
+            <DeleteItemDialog item={item} />
+          </div>
+        )}
       </div>
     </Card>
   );

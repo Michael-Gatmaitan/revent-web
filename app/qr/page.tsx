@@ -8,16 +8,26 @@ import {
   boundingBox,
   centerText,
 } from "@yudiel/react-qr-scanner";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
 
-const styles = {
-  container: {
-    width: 400,
-    margin: "auto",
-  },
-  controls: {
-    marginBottom: 8,
-  },
-};
+// const styles = {
+//   container: {
+//     width: 400,
+//     margin: "auto",
+//   },
+//   controls: {
+//     marginBottom: 8,
+//   },
+// };
 
 export default function ScannerPage() {
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
@@ -44,6 +54,7 @@ export default function ScannerPage() {
   const handleScan = async (data: string) => {
     setPause(true);
     try {
+      console.log(data);
       // Call process
       // if (in or out)
     } catch (error) {
@@ -52,26 +63,62 @@ export default function ScannerPage() {
   };
 
   return (
-    <div>
-      <div style={styles.controls}>
-        <select onChange={(e) => setDeviceId(e.target.value)}>
-          <option value={undefined}>Select a device</option>
-          {devices.map((device, index) => (
-            <option key={index} value={device.deviceId}>
-              {device.label}
-            </option>
-          ))}
-        </select>
-        <select
-          style={{ marginLeft: 5 }}
-          onChange={(e) => setTracker(e.target.value)}
-        >
-          <option value="centerText">Center Text</option>
-          <option value="outline">Outline</option>
-          <option value="boundingBox">Bounding Box</option>
-          <option value={undefined}>No Tracker</option>
-        </select>
-      </div>
+    <Card className="w-[100%] h-full grid content-center bg-red-500">
+      {/* <div> */}
+      {/*   <select onChange={(e) => setDeviceId(e.target.value)}> */}
+      {/*     <option value={undefined}>Select a device</option> */}
+      {/*     {devices.map((device, index) => ( */}
+      {/*       <option key={index} value={device.deviceId}> */}
+      {/*         {device.label} */}
+      {/*       </option> */}
+      {/*     ))} */}
+      {/*   </select> */}
+      {/*   <select */}
+      {/*     style={{ marginLeft: 5 }} */}
+      {/*     onChange={(e) => setTracker(e.target.value)} */}
+      {/*   > */}
+      {/*     <option value="centerText">Center Text</option> */}
+      {/*     <option value="outline">Outline</option> */}
+      {/*     <option value="boundingBox">Bounding Box</option> */}
+      {/*     <option value={undefined}>No Tracker</option> */}
+      {/*   </select> */}
+      {/* </div> */}
+
+      <Select
+        onValueChange={(val) => {
+          console.log(val);
+        }}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select a device" />
+        </SelectTrigger>
+
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Devices</SelectLabel>
+            {devices.map((device, index) => (
+              <SelectItem value={device.deviceId} key={index}>
+                {device.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
+      <Select>
+        {/* <SelectTrigger> */}
+        {/* <SelectValue placeholder="" */}
+        {/* </SelectTrigger> */}
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="centerText">Center text</SelectItem>
+            <SelectItem value="outline">Outline</SelectItem>
+            <SelectItem value="boundingBox">Bounding Box</SelectItem>
+            <SelectItem value="noTracker">No tracker</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
       <Scanner
         formats={[
           "qr_code",
@@ -96,9 +143,9 @@ export default function ScannerPage() {
           "upc_a",
           "upc_e",
         ]}
-        constraints={{
-          deviceId: deviceId,
-        }}
+        // constraints={{
+        //   deviceId: deviceId,
+        // }}
         onScan={(detectedCodes) => {
           handleScan(detectedCodes[0].rawValue);
         }}
@@ -107,17 +154,19 @@ export default function ScannerPage() {
         }}
         styles={{ container: { height: "400px", width: "400px" } }}
         components={{
-          audio: true,
+          // audio: true,
           onOff: true,
-          torch: true,
+          // torch: true,
           zoom: true,
           finder: true,
-          tracker: getTracker(),
+          // tracker: getTracker(),
         }}
         allowMultiple={true}
         scanDelay={2000}
         paused={pause}
       />
-    </div>
+
+      <div>Use this to scan QR of In and Out</div>
+    </Card>
   );
 }

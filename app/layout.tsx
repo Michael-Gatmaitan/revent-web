@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/lib/theme-provider";
 import { Toaster } from "sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "./components/app-sidebar";
+import StoreProvider from "@/lib/store-provider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -32,19 +33,21 @@ export default function RootLayout({
       <body
         className={`${poppins.className} ${playfairDisplay.style} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <SidebarProvider>
-            <AppSidebar />
-            {/* <AppNav /> */}
-            <div className="p-3 md:p-4">{children}</div>
-            <Toaster />
-          </SidebarProvider>
-        </ThemeProvider>
+        <StoreProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <SidebarProvider>
+              <AppSidebar />
+              {/* <AppNav /> */}
+              <main className="w-full p-3 md:p-4">{children}</main>
+              <Toaster />
+            </SidebarProvider>
+          </ThemeProvider>
+        </StoreProvider>
       </body>
     </html>
   );
