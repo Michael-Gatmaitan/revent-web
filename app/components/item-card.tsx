@@ -12,6 +12,7 @@ import {
   addQuantityToItem,
   removeItem,
   selectItemData,
+  selectWholeData,
 } from "@/lib/features/orderSlice";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -85,10 +86,16 @@ const ItemCard = ({
     );
   };
 
+  const [qr, setQR] = useState<string | null>(null);
+  const wholeData = useAppSelector(selectWholeData);
+  const displayQR = () => {
+    console.log(wholeData);
+  };
   return (
     <Card className="p-4">
       {selectMode ? (
         <div className="flex justify-between">
+          w
           <Checkbox
             onCheckedChange={handleAddItem}
             disabled={item.stock <= 0}
@@ -140,6 +147,8 @@ const ItemCard = ({
             >
               <MinusIcon />
             </Button>
+
+            <Button onClick={displayQR}>Process</Button>
           </div>
         ) : (
           <div className="flex gap-2 mt-4">

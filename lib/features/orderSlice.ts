@@ -98,7 +98,7 @@ const itemSlice = createSlice({
 });
 
 export const selectItemData = (state: RootState) => state.itemReducer.data;
-export const selectWhoteData = (state: RootState) => state.itemReducer;
+export const selectWholeData = (state: RootState) => state.itemReducer;
 
 export const { addItem, removeItem, addQuantityToItem } = itemSlice.actions;
 export default itemSlice.reducer;
