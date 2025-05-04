@@ -12,7 +12,6 @@ import {
   addQuantityToItem,
   removeItem,
   selectItemData,
-  selectWholeData,
 } from "@/lib/features/orderSlice";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -29,23 +28,21 @@ const ItemCard = ({
   const dispatch = useAppDispatch();
   const itemImageLocal = `http://localhost/imsa/data/item_images/${item.imageURL}`;
   const [selectedQuantity, setSelectedQuantity] = useState(0);
-  const [selected, setSelected] = useState(false);
+  // const [selected, setSelected] = useState(false);
 
   const alldata = useAppSelector(selectItemData);
+  const _selected =
+    alldata.filter((data) => data.productID === item.productID).length !== 0;
 
   useEffect(() => {
-    console.log(alldata);
-  }, [alldata]);
+    if (!_selected) setSelectedQuantity(0);
+  }, [_selected]);
 
-  useEffect(() => {
-    if (!selected) setSelectedQuantity(0);
-  }, [selected]);
+  const handleAddItem = (isSelected: boolean) => {
+    console.log(item, isSelected);
+    setSelectedQuantity(1);
 
-  const handleAddItem = (val: boolean) => {
-    console.log(item, val);
-    setSelected(val);
-
-    if (!val) {
+    if (!isSelected) {
       // Remove item
       console.log("REMOVING ITEM`");
       dispatch(removeItem(item.productID));
@@ -57,11 +54,13 @@ const ItemCard = ({
         stock,
         imageURL,
         unitPrice,
-        isChecked: val,
-        selectedQuantity,
+        isChecked: isSelected,
+        selectedQuantity: 1,
       };
       dispatch(addItem(data));
     }
+
+    console.log(alldata);
   };
 
   const handleAddQuantityToItem = () => {
@@ -77,26 +76,30 @@ const ItemCard = ({
 
   const handleRemoveQuantityToItem = () => {
     setSelectedQuantity((prev) => prev - 1);
-    console.log(selectedQuantity);
-    dispatch(
-      addQuantityToItem({
-        productID: item.productID,
-        quantity: selectedQuantity - 1,
-      }),
-    );
+    if (selectedQuantity - 1 === 0) {
+      dispatch(removeItem(item.productID));
+    } else {
+      dispatch(
+        addQuantityToItem({
+          productID: item.productID,
+          quantity: selectedQuantity - 1,
+        }),
+      );
+    }
   };
 
-  const [qr, setQR] = useState<string | null>(null);
-  const wholeData = useAppSelector(selectWholeData);
-  const displayQR = () => {
-    console.log(wholeData);
-  };
+  // const [qr, setQR] = useState<string | null>(null);
+
+  // const displayQR = () => {
+  //   console.log(wholeData);
+  // };
+
   return (
     <Card className="p-4">
       {selectMode ? (
         <div className="flex justify-between">
-          w
           <Checkbox
+            checked={_selected}
             onCheckedChange={handleAddItem}
             disabled={item.stock <= 0}
           />
@@ -133,22 +136,21 @@ const ItemCard = ({
         {selectMode ? (
           <div className="flex gap-2 mt-8 items-center">
             <Button
+              onClick={handleRemoveQuantityToItem}
+              disabled={selectedQuantity <= 0 || !_selected}
+            >
+              <MinusIcon />
+            </Button>
+            <div>{selectedQuantity}</div>
+            <Button
               onClick={handleAddQuantityToItem}
               disabled={
-                selectedQuantity === item.stock || !selected || item.stock <= 0
+                selectedQuantity === item.stock || !_selected || item.stock <= 0
               }
             >
               <PlusIcon />
             </Button>
-            <div>{selectedQuantity}</div>
-            <Button
-              onClick={handleRemoveQuantityToItem}
-              disabled={selectedQuantity <= 0 || !selected}
-            >
-              <MinusIcon />
-            </Button>
-
-            <Button onClick={displayQR}>Process</Button>
+            {/* <Button onClick={displayQR}>Process</Button> */}
           </div>
         ) : (
           <div className="flex gap-2 mt-4">

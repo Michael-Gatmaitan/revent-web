@@ -1,5 +1,5 @@
 import createApolloClient from "@/lib/apollo-client";
-import { GET_ITEMS, GET_SALES } from "@/lib/gql";
+import { GET_SALES } from "@/lib/gql";
 
 export default async function Home() {
   const client = createApolloClient();

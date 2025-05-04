@@ -17,12 +17,26 @@ interface Sale {
   customerName: string;
   itemName: string;
   saleDate: string;
-  discount: Float!;
+  discount: number;
   quantity: number;
-  unitPrice: Float!;
+  unitPrice: number;
 }
 
 interface MutationMessage {
   message: string;
   success: boolean;
+}
+
+interface Customer {
+  customerID: number;
+  fullName: string;
+  email: string;
+  mobile: number;
+  phone2: number;
+  address: string;
+  address2: string;
+  city: string;
+  district: string;
+  status: string;
+  createdOn: string;
 }

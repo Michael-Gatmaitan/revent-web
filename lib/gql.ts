@@ -99,3 +99,21 @@ export const GET_SALES = gql`
     }
   }
 `;
+
+export const GET_CUSTOMERS = gql`
+  query Customers {
+    customers {
+      customerID
+      fullName
+      email
+      mobile
+      phone2
+      address
+      address2
+      city
+      district
+      status
+      createdOn
+    }
+  }
+`;

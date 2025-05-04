@@ -48,23 +48,15 @@ const itemSlice = createSlice({
   initialState,
   reducers: {
     // setters
+    resetData(state: InitItems) {
+      state.data = [];
+      state.customerID = null;
+    },
     setAsIn(state: InitItems) {
-      state = {
-        data: [],
-        revent: true,
-        type: "in",
-        customerID: null,
-      };
       console.log(`${state} state set as in`);
     },
     setAsOut(state: InitItems) {
-      state = {
-        data: [],
-        revent: true,
-        type: "out",
-        customerID: null,
-      };
-
+      state.type = "out";
       console.log(`${state} state set as out`);
     },
     setCustomerID(state: InitItems, action: PayloadAction<number>) {
@@ -89,9 +81,7 @@ const itemSlice = createSlice({
       const index = state.data.findIndex(
         (item) => item.productID === productID,
       );
-
       state.data[index].selectedQuantity = quantity;
-
       console.log("quantity handled");
     },
   },
@@ -99,6 +89,16 @@ const itemSlice = createSlice({
 
 export const selectItemData = (state: RootState) => state.itemReducer.data;
 export const selectWholeData = (state: RootState) => state.itemReducer;
+export const selectSelectedCustomerID = (state: RootState) =>
+  state.itemReducer.customerID;
 
-export const { addItem, removeItem, addQuantityToItem } = itemSlice.actions;
+export const {
+  addItem,
+  removeItem,
+  addQuantityToItem,
+  setAsIn,
+  setAsOut,
+  setCustomerID,
+  resetData,
+} = itemSlice.actions;
 export default itemSlice.reducer;

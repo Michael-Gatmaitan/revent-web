@@ -8,7 +8,7 @@ const ItemsPage = async () => {
     query: GET_ITEMS,
   });
 
-  if (error) return <div>Something went wrong: ${error.message}</div>;
+  if (error) return <div>Something went wrong: {error.message}</div>;
 
   if (loading) return <div>Loading...</div>;
 
