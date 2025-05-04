@@ -29,7 +29,7 @@ interface ItemData {
   selectedQuantity: number;
 }
 
-interface InitItems {
+export interface InitItems {
   data: ItemData[];
   revent: boolean;
   type: "" | "in" | "out";

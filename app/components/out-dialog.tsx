@@ -29,6 +29,7 @@ import {
   selectSelectedCustomerID,
   setCustomerID,
 } from "@/lib/features/orderSlice";
+import QrDialog from "./qr-dialog";
 
 const OutDialog = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -131,6 +132,7 @@ const OutDialog = () => {
               Generate QR Code
             </Button>
           </DialogClose>
+          <QrDialog />
         </DialogFooter>
       </DialogContent>
     </Dialog>

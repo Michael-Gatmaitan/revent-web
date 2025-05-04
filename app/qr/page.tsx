@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
+import { InitItems } from "@/lib/features/orderSlice";
 
 // const styles = {
 //   container: {
@@ -30,40 +31,56 @@ import { Card } from "@/components/ui/card";
 // };
 
 export default function ScannerPage() {
-  const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
-  const [tracker, setTracker] = useState<string | undefined>("centerText");
+  // const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
+  // const [tracker, setTracker] = useState<string | undefined>("centerText");
   const [pause, setPause] = useState(false);
 
   const devices = useDevices();
 
-  function getTracker() {
-    switch (tracker) {
-      case "outline":
-        return outline;
-      case "boundingBox":
-        return boundingBox;
-      case "centerText":
-        return centerText;
-      default:
-        return undefined;
-    }
-  }
+  // function getTracker() {
+  //   switch (tracker) {
+  //     case "outline":
+  //       return outline;
+  //     case "boundingBox":
+  //       return boundingBox;
+  //     case "centerText":
+  //       return centerText;
+  //     default:
+  //       return undefined;
+  //   }
+  // }
 
   // Create functions for IN and OUT
+  // This is where we gonna call APIs to handle IN and OUT
 
-  const handleScan = async (data: string) => {
+  const handleScan = async (qrdata: string) => {
     setPause(true);
+
     try {
-      console.log(data);
-      // Call process
-      // if (in or out)
+      const recievedData = JSON.parse(qrdata);
+      console.log("RECIEVED DATA: ", recievedData);
+
+      const { revent, data, type }: InitItems = recievedData;
+
+      if (!revent) throw new Error("QR Code not valid");
+
+      if (type === "out") {
+        console.log("ITEM OUT");
+        // Call api inside loop
+        console.log(data);
+      } else if (type === "in") {
+        console.log("ITEM IN");
+        // Call api inside loop
+      }
     } catch (error) {
-      console.log(error);
+      console.log(`Error occured: ${error}`);
+    } finally {
+      console.log("Scan performed");
     }
   };
 
   return (
-    <Card className="w-[100%] h-full grid content-center bg-red-500">
+    <div className="w-[100%] h-full grid content-center bg-red-500">
       {/* <div> */}
       {/*   <select onChange={(e) => setDeviceId(e.target.value)}> */}
       {/*     <option value={undefined}>Select a device</option> */}
@@ -158,7 +175,7 @@ export default function ScannerPage() {
           onOff: true,
           // torch: true,
           zoom: true,
-          finder: true,
+          // finder: true,
           // tracker: getTracker(),
         }}
         allowMultiple={true}
@@ -167,6 +184,6 @@ export default function ScannerPage() {
       />
 
       <div>Use this to scan QR of In and Out</div>
-    </Card>
+    </div>
   );
 }
