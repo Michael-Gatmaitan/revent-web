@@ -3,22 +3,24 @@
 import { useState } from "react";
 import {
   Scanner,
-  useDevices,
-  outline,
-  boundingBox,
-  centerText,
+  // useDevices,
+  // outline,
+  // boundingBox,
+  // centerText,
 } from "@yudiel/react-qr-scanner";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectGroup,
+//   SelectItem,
+//   SelectLabel,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import { InitItems } from "@/lib/features/orderSlice";
+import { toast } from "sonner";
+import createApolloClient from "@/lib/apollo-client";
+import { DEDUCT_ITEM } from "@/lib/gql";
 
 // const styles = {
 //   container: {
@@ -31,29 +33,13 @@ import { InitItems } from "@/lib/features/orderSlice";
 // };
 
 export default function ScannerPage() {
-  // const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
-  // const [tracker, setTracker] = useState<string | undefined>("centerText");
   const [pause, setPause] = useState(false);
-
-  const devices = useDevices();
-
-  // function getTracker() {
-  //   switch (tracker) {
-  //     case "outline":
-  //       return outline;
-  //     case "boundingBox":
-  //       return boundingBox;
-  //     case "centerText":
-  //       return centerText;
-  //     default:
-  //       return undefined;
-  //   }
-  // }
+  // const devices = useDevices();
 
   // Create functions for IN and OUT
   // This is where we gonna call APIs to handle IN and OUT
 
-  const handleScan = async (qrdata: string) => {
+  const handleScan = (qrdata: string) => {
     setPause(true);
 
     try {
@@ -64,11 +50,28 @@ export default function ScannerPage() {
 
       if (!revent) throw new Error("QR Code not valid");
 
+      const client = createApolloClient();
+
       if (type === "out") {
-        console.log("ITEM OUT");
+        const { customerID } = recievedData;
+
         // Call api inside loop
-        console.log(data);
+        data.forEach(async (item) => {
+          const result = await client.mutate({
+            mutation: DEDUCT_ITEM,
+            variables: {
+              productID: item.productID,
+              quantity: item.selectedQuantity,
+              customerID,
+            },
+          });
+
+          console.log(result);
+        });
+
+        toast("ITEM OUT successfully perfirmed");
       } else if (type === "in") {
+        toast("ITEM IN");
         console.log("ITEM IN");
         // Call api inside loop
       }
@@ -81,60 +84,40 @@ export default function ScannerPage() {
 
   return (
     <div className="w-[100%] h-full grid content-center bg-red-500">
-      {/* <div> */}
-      {/*   <select onChange={(e) => setDeviceId(e.target.value)}> */}
-      {/*     <option value={undefined}>Select a device</option> */}
-      {/*     {devices.map((device, index) => ( */}
-      {/*       <option key={index} value={device.deviceId}> */}
-      {/*         {device.label} */}
-      {/*       </option> */}
-      {/*     ))} */}
-      {/*   </select> */}
-      {/*   <select */}
-      {/*     style={{ marginLeft: 5 }} */}
-      {/*     onChange={(e) => setTracker(e.target.value)} */}
-      {/*   > */}
-      {/*     <option value="centerText">Center Text</option> */}
-      {/*     <option value="outline">Outline</option> */}
-      {/*     <option value="boundingBox">Bounding Box</option> */}
-      {/*     <option value={undefined}>No Tracker</option> */}
-      {/*   </select> */}
-      {/* </div> */}
-
-      <Select
-        onValueChange={(val) => {
-          console.log(val);
-        }}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select a device" />
-        </SelectTrigger>
-
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Devices</SelectLabel>
-            {devices.map((device, index) => (
-              <SelectItem value={device.deviceId} key={index}>
-                {device.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-
-      <Select>
-        {/* <SelectTrigger> */}
-        {/* <SelectValue placeholder="" */}
-        {/* </SelectTrigger> */}
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="centerText">Center text</SelectItem>
-            <SelectItem value="outline">Outline</SelectItem>
-            <SelectItem value="boundingBox">Bounding Box</SelectItem>
-            <SelectItem value="noTracker">No tracker</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      {/* <Select */}
+      {/*   onValueChange={(val) => { */}
+      {/*     console.log(val); */}
+      {/*   }} */}
+      {/* > */}
+      {/*   <SelectTrigger className="w-[180px]"> */}
+      {/*     <SelectValue placeholder="Select a device" /> */}
+      {/*   </SelectTrigger> */}
+      {/**/}
+      {/*   <SelectContent> */}
+      {/*     <SelectGroup> */}
+      {/*       <SelectLabel>Devices</SelectLabel> */}
+      {/*       {devices.map((device, index) => ( */}
+      {/*         <SelectItem value={device.deviceId} key={index}> */}
+      {/*           {device.label} */}
+      {/*         </SelectItem> */}
+      {/*       ))} */}
+      {/*     </SelectGroup> */}
+      {/*   </SelectContent> */}
+      {/* </Select> */}
+      {/**/}
+      {/* <Select> */}
+      {/*   {/* <SelectTrigger> */}
+      {/*   {/* <SelectValue placeholder="" */}
+      {/*   {/* </SelectTrigger> */}
+      {/*   <SelectContent> */}
+      {/*     <SelectGroup> */}
+      {/*       <SelectItem value="centerText">Center text</SelectItem> */}
+      {/*       <SelectItem value="outline">Outline</SelectItem> */}
+      {/*       <SelectItem value="boundingBox">Bounding Box</SelectItem> */}
+      {/*       <SelectItem value="noTracker">No tracker</SelectItem> */}
+      {/*     </SelectGroup> */}
+      {/*   </SelectContent> */}
+      {/* </Select> */}
 
       <Scanner
         formats={[
