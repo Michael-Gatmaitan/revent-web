@@ -8,14 +8,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { selectWholeData } from "@/lib/features/orderSlice";
-import { useAppSelector } from "@/lib/hook";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 
-const QrDialog = () => {
-  const wholeData = useAppSelector(selectWholeData);
-
+const QrDialog = ({ data }) => {
+  console.log("Data from QRCode generator: ", data);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -31,11 +28,7 @@ const QrDialog = () => {
         </DialogHeader>
 
         <div className="flex items-center justify-center">
-          <QRCodeSVG
-            value={JSON.stringify(wholeData)}
-            width={250}
-            height={250}
-          />
+          <QRCodeSVG value={JSON.stringify(data)} width={250} height={250} />
         </div>
       </DialogContent>
     </Dialog>

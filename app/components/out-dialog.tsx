@@ -27,6 +27,7 @@ import {
   resetData,
   selectItemData,
   selectSelectedCustomerID,
+  selectWholeData,
   setCustomerID,
 } from "@/lib/features/orderSlice";
 import QrDialog from "./qr-dialog";
@@ -36,6 +37,7 @@ const OutDialog = () => {
   const itemData = useAppSelector(selectItemData);
   const selectedCustomerID = useAppSelector(selectSelectedCustomerID);
   const dispatch = useAppDispatch();
+  const wholeData = useAppSelector(selectWholeData);
 
   useEffect(() => {
     const client = createApolloClient();
@@ -132,7 +134,7 @@ const OutDialog = () => {
               Generate QR Code
             </Button>
           </DialogClose>
-          <QrDialog />
+          <QrDialog data={wholeData} />
         </DialogFooter>
       </DialogContent>
     </Dialog>

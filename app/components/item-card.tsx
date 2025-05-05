@@ -21,9 +21,11 @@ import { Badge } from "@/components/ui/badge";
 const ItemCard = ({
   item,
   selectMode,
+  inItemList,
 }: {
   item: Item;
   selectMode?: boolean;
+  inItemList?: boolean;
 }) => {
   const dispatch = useAppDispatch();
   const itemImageLocal = `http://localhost/imsa/data/item_images/${item.imageURL}`;
@@ -95,7 +97,7 @@ const ItemCard = ({
   // };
 
   return (
-    <Card className="p-4">
+    <Card className={`p-4 ${inItemList ? "flex-row bg-purple-50" : ""}`}>
       {selectMode ? (
         <div className="flex justify-between">
           <Checkbox
@@ -152,7 +154,7 @@ const ItemCard = ({
             </Button>
             {/* <Button onClick={displayQR}>Process</Button> */}
           </div>
-        ) : (
+        ) : inItemList ? null : (
           <div className="flex gap-2 mt-4">
             <UpdateItemDialog item={item} />
             <DeleteItemDialog item={item} />

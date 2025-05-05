@@ -2,23 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-// const temp = {
-//   data: [
-//     {
-//       productID: 49,
-//       itemName: "Hiking Bag",
-//       stock: 6,
-//       imageURL: "1526297640_hiking bag.jpg",
-//       unitPrice: 1200,
-//       isChecked: true,
-//       selectedQuantity: 4,
-//     },
-//   ],
-//   revent: true,
-//   type: "out",
-//   customerID: 41,
-// };
-
 interface ItemData {
   productID: number;
   itemName: string;
@@ -29,7 +12,7 @@ interface ItemData {
   selectedQuantity: number;
 }
 
-export interface InitItems {
+interface InitItems {
   data: ItemData[];
   revent: boolean;
   type: "" | "in" | "out";

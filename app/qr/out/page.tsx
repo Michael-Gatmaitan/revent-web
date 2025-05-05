@@ -1,3 +1,4 @@
+// "use server";
 import Items from "@/app/items/items";
 import createApolloClient from "@/lib/apollo-client";
 import { GET_ITEMS } from "@/lib/gql";
@@ -16,7 +17,7 @@ const OutPage = async () => {
 
   return (
     <div>
-      <Items items={items} selectMode={true} />
+      <Items items={items} selectMode={true} />{" "}
     </div>
   );
 };

@@ -1,40 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Scanner,
-  // useDevices,
-  // outline,
-  // boundingBox,
-  // centerText,
-} from "@yudiel/react-qr-scanner";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectGroup,
-//   SelectItem,
-//   SelectLabel,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-import { InitItems } from "@/lib/features/orderSlice";
+import { Scanner } from "@yudiel/react-qr-scanner";
+// import { IGeneralData } from "@/lib/features/orderSlice";
 import { toast } from "sonner";
 import createApolloClient from "@/lib/apollo-client";
-import { DEDUCT_ITEM } from "@/lib/gql";
+import { CREATE_ITEM, DEDUCT_ITEM } from "@/lib/gql";
 
-// const styles = {
-//   container: {
-//     width: 400,
-//     margin: "auto",
-//   },
-//   controls: {
-//     marginBottom: 8,
-//   },
-// };
+interface IGeneralData {
+  productID: number;
+  selectedQuantity: number;
+  itemName: string;
+  itemNumber: string;
+  discount: number;
+  unitPrice: string;
+  stock: number;
+  imageURL: string;
+  description: string;
+}
+
+interface IGeneralWholeData {
+  data: IGeneralData[];
+  revent: boolean;
+  type: "in" | "out" | "";
+  customerID: number;
+}
 
 export default function ScannerPage() {
   const [pause, setPause] = useState(false);
-  // const devices = useDevices();
 
   // Create functions for IN and OUT
   // This is where we gonna call APIs to handle IN and OUT
@@ -46,7 +39,9 @@ export default function ScannerPage() {
       const recievedData = JSON.parse(qrdata);
       console.log("RECIEVED DATA: ", recievedData);
 
-      const { revent, data, type }: InitItems = recievedData;
+      const { revent, data, type }: IGeneralWholeData = recievedData;
+
+      console.log(revent);
 
       if (!revent) throw new Error("QR Code not valid");
 
@@ -69,11 +64,37 @@ export default function ScannerPage() {
           console.log(result);
         });
 
-        toast("ITEM OUT successfully perfirmed");
+        toast("Item successfully deducted and sales created");
       } else if (type === "in") {
-        toast("ITEM IN");
-        console.log("ITEM IN");
         // Call api inside loop
+
+        data.forEach(async (item) => {
+          const {
+            itemNumber,
+            itemName,
+            discount,
+            stock,
+            unitPrice,
+            imageURL,
+            description,
+          } = item;
+          const result = await client.mutate({
+            mutation: CREATE_ITEM,
+            variables: {
+              itemNumber: parseInt(itemNumber),
+              itemName,
+              discount,
+              stock,
+              unitPrice,
+              imageURL,
+              description,
+            },
+          });
+
+          console.log(result);
+        });
+
+        toast("Item successfully created");
       }
     } catch (error) {
       console.log(`Error occured: ${error}`);
@@ -84,41 +105,6 @@ export default function ScannerPage() {
 
   return (
     <div className="w-[100%] h-full grid content-center bg-red-500">
-      {/* <Select */}
-      {/*   onValueChange={(val) => { */}
-      {/*     console.log(val); */}
-      {/*   }} */}
-      {/* > */}
-      {/*   <SelectTrigger className="w-[180px]"> */}
-      {/*     <SelectValue placeholder="Select a device" /> */}
-      {/*   </SelectTrigger> */}
-      {/**/}
-      {/*   <SelectContent> */}
-      {/*     <SelectGroup> */}
-      {/*       <SelectLabel>Devices</SelectLabel> */}
-      {/*       {devices.map((device, index) => ( */}
-      {/*         <SelectItem value={device.deviceId} key={index}> */}
-      {/*           {device.label} */}
-      {/*         </SelectItem> */}
-      {/*       ))} */}
-      {/*     </SelectGroup> */}
-      {/*   </SelectContent> */}
-      {/* </Select> */}
-      {/**/}
-      {/* <Select> */}
-      {/*   {/* <SelectTrigger> */}
-      {/*   {/* <SelectValue placeholder="" */}
-      {/*   {/* </SelectTrigger> */}
-      {/*   <SelectContent> */}
-      {/*     <SelectGroup> */}
-      {/*       <SelectItem value="centerText">Center text</SelectItem> */}
-      {/*       <SelectItem value="outline">Outline</SelectItem> */}
-      {/*       <SelectItem value="boundingBox">Bounding Box</SelectItem> */}
-      {/*       <SelectItem value="noTracker">No tracker</SelectItem> */}
-      {/*     </SelectGroup> */}
-      {/*   </SelectContent> */}
-      {/* </Select> */}
-
       <Scanner
         formats={[
           "qr_code",
@@ -143,9 +129,6 @@ export default function ScannerPage() {
           "upc_a",
           "upc_e",
         ]}
-        // constraints={{
-        //   deviceId: deviceId,
-        // }}
         onScan={(detectedCodes) => {
           handleScan(detectedCodes[0].rawValue);
         }}
