@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "./components/app-sidebar";
 import StoreProvider from "@/lib/store-provider";
+import AppNav from "./components/app-nav";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -42,7 +43,7 @@ export default function RootLayout({
           >
             <SidebarProvider>
               <AppSidebar />
-              {/* <AppNav /> */}
+              <AppNav />
               <main className="w-full p-3 md:p-4">{children}</main>
               <Toaster />
             </SidebarProvider>

@@ -14,14 +14,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Label } from "@radix-ui/react-label";
 import {
   ArrowUpFromDot,
   CirclePlus,
   ScanQrCode,
   ShoppingBasket,
+  Smile,
+  Star,
 } from "lucide-react";
 
 import Link from "next/link";
+import ToggleMode from "./mode-toggle";
 
 const items = [
   {
@@ -58,6 +62,12 @@ const items = [
         icon: ShoppingBasket,
         href: "/items",
       },
+      {
+        id: 1,
+        title: "Forcasting",
+        icon: Star,
+        href: "/forecasting",
+      },
     ],
   },
 ];
@@ -65,8 +75,26 @@ const items = [
 const AppSidebar = () => {
   return (
     <Sidebar>
-      <SidebarHeader>Michael Gatmaitan</SidebarHeader>
+      <SidebarHeader className="p-4">
+        <div className="flex gap-2">
+          <Smile />
+          <div>Michael Gatmaitan</div>
+        </div>
+      </SidebarHeader>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel></SidebarGroupLabel>
+
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem className="px-2 flex align-center gap-2">
+                <ToggleMode />
+                <Label htmlFor="switch-mode">Switch mode</Label>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
         {items.map((item) => (
           <Collapsible defaultOpen className="group/collapsible" key={item.id}>
             <SidebarGroup>

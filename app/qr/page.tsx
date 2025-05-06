@@ -2,10 +2,16 @@
 
 import { useState } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
-// import { IGeneralData } from "@/lib/features/orderSlice";
 import { toast } from "sonner";
 import createApolloClient from "@/lib/apollo-client";
 import { CREATE_ITEM, DEDUCT_ITEM } from "@/lib/gql";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface IGeneralData {
   productID: number;
@@ -104,52 +110,62 @@ export default function ScannerPage() {
   };
 
   return (
-    <div className="w-[100%] h-full grid content-center bg-red-500">
-      <Scanner
-        formats={[
-          "qr_code",
-          "micro_qr_code",
-          "rm_qr_code",
-          "maxi_code",
-          "pdf417",
-          "aztec",
-          "data_matrix",
-          "matrix_codes",
-          "dx_film_edge",
-          "databar",
-          "databar_expanded",
-          "codabar",
-          "code_39",
-          "code_93",
-          "code_128",
-          "ean_8",
-          "ean_13",
-          "itf",
-          "linear_codes",
-          "upc_a",
-          "upc_e",
-        ]}
-        onScan={(detectedCodes) => {
-          handleScan(detectedCodes[0].rawValue);
-        }}
-        onError={(error) => {
-          console.log(`onError: ${error}'`);
-        }}
-        styles={{ container: { height: "400px", width: "400px" } }}
-        components={{
-          // audio: true,
-          onOff: true,
-          // torch: true,
-          zoom: true,
-          // finder: true,
-          // tracker: getTracker(),
-        }}
-        allowMultiple={true}
-        scanDelay={2000}
-        paused={pause}
-      />
+    <div className="w-[100%] h-full grid items-center justify-center">
+      <div className="grid align-center w-min h-min">
+        <div className="grid mb-4">
+          <div className="text-xl font-bold">Qr Code Scanner</div>
+          <div>Use this scanner for in and out</div>
+        </div>
+        <div>
+          <div className="rounded-md overflow-hidden">
+            <Scanner
+              formats={[
+                "qr_code",
+                "micro_qr_code",
+                "rm_qr_code",
+                "maxi_code",
+                "pdf417",
+                "aztec",
+                "data_matrix",
+                "matrix_codes",
+                "dx_film_edge",
+                "databar",
+                "databar_expanded",
+                "codabar",
+                "code_39",
+                "code_93",
+                "code_128",
+                "ean_8",
+                "ean_13",
+                "itf",
+                "linear_codes",
+                "upc_a",
+                "upc_e",
+              ]}
+              onScan={(detectedCodes) => {
+                handleScan(detectedCodes[0].rawValue);
+              }}
+              onError={(error) => {
+                console.log(`onError: ${error}'`);
+              }}
+              styles={{ container: { height: "400px", width: "400px" } }}
+              components={{
+                // audio: true,
+                onOff: true,
+                // torch: true,
+                zoom: true,
+                // finder: true,
+                // tracker: getTracker(),
+              }}
+              allowMultiple={true}
+              scanDelay={2000}
+              paused={pause}
+            />
+          </div>
+        </div>
+      </div>
 
-      <div>Use this to scan QR of In and Out</div>
+      {/* <div>Use this to scan QR of In and Out</div> */}
     </div>
   );
 }

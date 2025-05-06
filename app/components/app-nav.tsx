@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const AppNav = () => {
   return (
-    <nav className="sticky top-0 px-3 lg:px-4 xl:px-8 py-4 flex items-center z-[100] bg-black/70 backdrop-blur-sm">
+    <nav className="fixed top-0 px-3 lg:px-4 xl:px-8 py-4 sm:flex md:hidden items-center z-[100] bg-black/70 backdrop-blur-sm w-screen">
       <div className="w-[50px] h-[50px]">
         <Image
           src={AppIcon}
