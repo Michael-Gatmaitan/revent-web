@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { toast } from "sonner";
 import createApolloClient from "@/lib/apollo-client";
-import { CREATE_ITEM, DEDUCT_ITEM } from "@/lib/gql";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { CREATE_ITEM, CREATE_TRANSACTION, DEDUCT_ITEM } from "@/lib/gql";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
 
 interface IGeneralData {
   productID: number;
@@ -67,7 +67,17 @@ export default function ScannerPage() {
             },
           });
 
-          console.log(result);
+          console.log("(OUT) RESULT: ", result);
+
+          const newTransaction = await client.mutate({
+            mutation: CREATE_TRANSACTION,
+            variables: {
+              description: "Item deducted",
+              type
+            }
+          });
+
+          console.log("New transaction: ", newTransaction);
         });
 
         toast("Item successfully deducted and sales created");
@@ -97,8 +107,20 @@ export default function ScannerPage() {
             },
           });
 
-          console.log(result);
+          console.log("(IN) RESULT: ", result);
+
+          const newTransaction = await client.mutate({
+            mutation: CREATE_TRANSACTION,
+            variables: {
+              description: "Item created",
+              type
+            }
+          });
+
+          console.log("New transaction: ", newTransaction);
         });
+
+        // Insert TRANSACTION here
 
         toast("Item successfully created");
       }
@@ -148,7 +170,7 @@ export default function ScannerPage() {
               onError={(error) => {
                 console.log(`onError: ${error}'`);
               }}
-              styles={{ container: { height: "400px", width: "400px" } }}
+              styles={{ container: { height: "350px", width: "350px" } }}
               components={{
                 // audio: true,
                 onOff: true,

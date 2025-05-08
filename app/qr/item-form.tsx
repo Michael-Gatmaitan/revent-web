@@ -60,9 +60,9 @@ const ItemForm = () => {
     defaultValues: {
       itemName: "",
       itemNumber: "",
-      discount: 0,
-      stock: 0,
-      unitPrice: 0,
+      discount: undefined,
+      stock: undefined,
+      unitPrice: undefined,
       imageURL: "",
       description: "",
     },

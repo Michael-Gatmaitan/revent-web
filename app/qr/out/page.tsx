@@ -17,7 +17,7 @@ const OutPage = async () => {
 
   return (
     <div>
-      <Items items={items} selectMode={true} />{" "}
+      <Items items={items} selectMode={true} showCheckout={true} />
     </div>
   );
 };

@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import ToggleMode from "./mode-toggle";
+import ToggleModes from "./mode-toggle";
 
 const items = [
   {
@@ -88,7 +88,7 @@ const AppSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem className="px-2 flex align-center gap-2">
-                <ToggleMode />
+                <ToggleModes />
                 <Label htmlFor="switch-mode">Switch mode</Label>
               </SidebarMenuItem>
             </SidebarMenu>

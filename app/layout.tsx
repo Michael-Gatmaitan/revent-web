@@ -42,9 +42,11 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <SidebarProvider>
-              <AppSidebar />
               <AppNav />
-              <main className="w-full p-3 md:p-4">{children}</main>
+              <AppSidebar />
+              <main className="w-full p-3 mt-[calc(82px)] md:mt-0 md:p-4">
+                {children}
+              </main>
               <Toaster />
             </SidebarProvider>
           </ThemeProvider>

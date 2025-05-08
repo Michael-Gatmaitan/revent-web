@@ -40,3 +40,9 @@ interface Customer {
   status: string;
   createdOn: string;
 }
+
+interface Transaction {
+  id: number;
+  description: string;
+  type: string;
+}

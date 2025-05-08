@@ -117,3 +117,22 @@ export const GET_CUSTOMERS = gql`
     }
   }
 `;
+
+export const GET_TRANSACTIONS = gql`
+  query Transactions {
+    transactions {
+      id
+      description
+      type
+    }
+  }
+`;
+
+export const CREATE_TRANSACTION = gql`
+  mutation CreateTransaction($description: String!, $type: String!) {
+    createTransaction(description: $description, type: $type) {
+      message
+      success
+    }
+  }
+`;
