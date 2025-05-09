@@ -16,6 +16,30 @@ export const GET_ITEMS = gql`
   }
 `;
 
+export const GET_ITEM_BY_ID = gql`
+  query Item($productID: Int!) {
+    item(productID: $productID) {
+      productID
+      itemNumber
+      itemName
+      discount
+      stock
+      unitPrice
+      status
+      description
+      imageURL
+    }
+  }
+`;
+
+export const GET_ITEM_SALE_BY_ID = gql`
+  query ItemSaleById($itemNumber: String!) {
+    itemSaleById(itemNumber: $itemNumber) {
+      saleDate
+    }
+  }
+`;
+
 export const CREATE_ITEM = gql`
   mutation CreateItem(
     $itemNumber: Int!

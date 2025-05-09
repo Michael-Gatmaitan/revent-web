@@ -60,9 +60,9 @@ const ItemForm = () => {
     defaultValues: {
       itemName: "",
       itemNumber: "",
-      discount: undefined,
-      stock: undefined,
-      unitPrice: undefined,
+      discount: 0,
+      stock: 0,
+      unitPrice: 0,
       imageURL: "",
       description: "",
     },
@@ -120,6 +120,20 @@ const ItemForm = () => {
                 </FormItem>
               )}
             />
+
+            {/* <FormField */}
+            {/*   control={form.control} */}
+            {/*   name="firstname" */}
+            {/*   render={({ field }) => ( */}
+            {/*     <FormItem> */}
+            {/*       <FormLabel>First name</FormLabel> */}
+            {/*       <FormControl> */}
+            {/*         <Input placeholder="First name" {...field} /> */}
+            {/*       </FormControl> */}
+            {/*       <FormMessage /> */}
+            {/*     </FormItem> */}
+            {/*   )} */}
+            {/* /> */}
           </div>
           <div className="flex gap-2">
             {/* discount */}
