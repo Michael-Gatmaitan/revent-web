@@ -3,6 +3,7 @@
 import createApolloClient from "@/lib/apollo-client";
 import { GET_ITEM_BY_ID, GET_ITEM_SALE_BY_ID } from "@/lib/gql";
 import ItemInfo from "./item-info";
+import ForecastedData from "./forecasted-data";
 
 const getItemById = async (id: number) => {
   try {
@@ -57,13 +58,6 @@ const page = async ({ params }: { params: { id: string } }) => {
   const _itemSales = await getItemSaleById(item.itemNumber.toString());
   const { itemSaleById }: { itemSaleById: Sale[] } = _itemSales;
 
-  // console.log(itemSaleById);
-
-  // itemSaleById.forEach((sale) => {
-  //   const saleDate = Date(sale.saleDate);
-  //   console.log(saleDate);
-  // });
-
   return (
     <div>
       {/* Display product info */}
@@ -77,6 +71,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       <ItemInfo sales={itemSaleById} item={item} />
 
       {/* Display forecast info */}
+      <ForecastedData sales={itemSaleById} item={item} />
     </div>
   );
 };

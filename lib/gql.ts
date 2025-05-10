@@ -36,6 +36,7 @@ export const GET_ITEM_SALE_BY_ID = gql`
   query ItemSaleById($itemNumber: String!) {
     itemSaleById(itemNumber: $itemNumber) {
       saleDate
+      quantity
     }
   }
 `;
