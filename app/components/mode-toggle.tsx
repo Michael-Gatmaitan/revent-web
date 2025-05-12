@@ -6,10 +6,6 @@ import React from "react";
 const ToggleMode = () => {
   const { setTheme, theme } = useTheme();
 
-  React.useEffect(() => {
-    console.log("Theme: ", theme);
-  }, [theme]);
-
   return (
     <Switch
       id="switch-mode"

@@ -52,6 +52,8 @@ export const generateForecast = async (recentData, options = {}) => {
       },
     });
 
+    console.log("API HORIZON: ", options.forecastHorizon);
+
     return response.data;
   } catch (error) {
     console.error("Error generating forecast:", error);

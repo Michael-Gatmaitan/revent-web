@@ -22,6 +22,25 @@ interface Sale {
   unitPrice: number;
 }
 
+interface SaleGraph {
+  productID: number;
+  itemNumber: string;
+  itemName: string;
+  unitPrice: number;
+  totalQuantity: number;
+  totalRevenue: number;
+}
+
+interface TopSales {
+  saleID: number;
+  total_quantity_sold: number;
+  unitPrice: number;
+  itemNumber: string;
+  itemName: string;
+  imageURL: string;
+  totalRevenue: number;
+}
+
 interface MutationMessage {
   message: string;
   success: boolean;

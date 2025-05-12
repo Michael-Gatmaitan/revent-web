@@ -95,21 +95,26 @@ def train_model():
         lookback = params.get('lookback', 30)
         forecast_horizon = params.get('forecast_horizon', 7)
         epochs = params.get('epochs', 50)
+
+        print("HORIZON IN TRAIN: " + str(forecast_horizon))
         
-        model, scaler = create_and_train_model(
             time_series, 
+        model, scaler = create_and_train_model(
             lookback=lookback,
             forecast_horizon=forecast_horizon,
             epochs=epochs
         )
-        
-        return jsonify({
+
+        result = jsonify({
             'success': True,
             'message': 'Model trained successfully',
             'model_path': MODEL_PATH,
             'scaler_path': SCALER_PATH
         })
-    
+
+        # result.headers.add("Access-Control-Allow-Origin", "*")
+        
+        return result
     except Exception as e:
         return jsonify({
             'success': False,
@@ -147,6 +152,8 @@ def forecast():
             last_sequence,
             forecast_horizon
         )
+
+        print("PYTHON HORIZON:" + str( forecast_horizon ));
         
         return jsonify({
             'success': True,

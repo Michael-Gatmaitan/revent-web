@@ -15,6 +15,7 @@ const ItemsPage = async () => {
   const { items }: { items: Item[] } = data;
 
   console.log(data);
+
   return (
     <div>
       <Items items={items} />

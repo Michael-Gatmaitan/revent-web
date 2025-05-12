@@ -1,7 +1,5 @@
 "use client";
-import { TrendingDown, TrendingUp } from "lucide-react";
 import { CartesianGrid, LabelList, Line, LineChart, XAxis } from "recharts";
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -80,6 +78,7 @@ export function ForecastGraph({
   if (!trendAnalysis) return <div>No trends calculated</div>;
 
   const { overallChange, immediateChange, forecastTrend } = trendAnalysis;
+  console.log(overallChange, immediateChange, forecastTrend);
 
   return (
     <Card>
@@ -144,37 +143,8 @@ export function ForecastGraph({
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          {overallChange > 0 ? (
-            <TrendingUp className="h-4 w-4" />
-          ) : (
-            <TrendingDown className="h-4 w-4" />
-          )}
-          Trending {overallChange > 0 ? "up" : "down"} by{" "}
-          {overallChange.toFixed(2)}% in next 7 days
-        </div>
-
-        <div className="flex gap-2 font-medium leading-none">
-          {immediateChange > 0 ? (
-            <TrendingUp className="h-4 w-4" />
-          ) : (
-            <TrendingDown className="h-4 w-4" />
-          )}
-          Immediate change (Next day) {immediateChange > 0 ? "up" : "down"} by{" "}
-          {immediateChange.toFixed(2)}%
-        </div>
-
-        <div className="flex gap-2 font-medium leading-none">
-          {forecastTrend > 0 ? (
-            <TrendingUp className="h-4 w-4" />
-          ) : (
-            <TrendingDown className="h-4 w-4" />
-          )}
-          Start vs End of forecasted data: {forecastTrend.toFixed(2)}%
-        </div>
-
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing forecasted sale in 7 days
         </div>
       </CardFooter>
     </Card>

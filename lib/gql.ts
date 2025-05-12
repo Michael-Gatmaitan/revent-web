@@ -35,8 +35,15 @@ export const GET_ITEM_BY_ID = gql`
 export const GET_ITEM_SALE_BY_ID = gql`
   query ItemSaleById($itemNumber: String!) {
     itemSaleById(itemNumber: $itemNumber) {
+      saleID
+      itemNumber
+      customerID
+      customerName
+      itemName
       saleDate
+      discount
       quantity
+      unitPrice
     }
   }
 `;
@@ -121,6 +128,33 @@ export const GET_SALES = gql`
       discount
       quantity
       unitPrice
+    }
+  }
+`;
+
+export const GET_SALE_GRAPH = gql`
+  query SaleGraph {
+    saleGraph {
+      productID
+      itemNumber
+      itemName
+      unitPrice
+      total_quantity_sold
+      totalRevenue
+    }
+  }
+`;
+
+export const GET_TOP_SALES = gql`
+  query TopSales {
+    topSales {
+      saleID
+      total_quantity_sold
+      unitPrice
+      itemNumber
+      itemName
+      imageURL
+      totalRevenue
     }
   }
 `;

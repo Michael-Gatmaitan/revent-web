@@ -1,6 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { ForecastGraph } from "./forecast-graph";
+import ForecastReport from "./forecast-report";
+import { Loader2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface IForecastedData {
   item: Item;
@@ -14,12 +25,17 @@ export type ITrendAnalysis = {
 } | null;
 
 const ForecastedData = ({ item, sales }: IForecastedData) => {
+  const [horizon, sethorizon] = useState<number>(7);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [saleHistory, setSaleHistory] = useState<number[]>();
   const [forecastedData, setForecastedData] = useState<number[]>();
   const [chartLabels, setChartLabels] = useState<string[]>();
   const [trendAnalysis, setTrendAnalysis] = useState<ITrendAnalysis>(null);
+  const [restockStatus, setRestockStatus] = useState({
+    need: false,
+    quantity: 0,
+  });
 
   const generateDateLabels = (
     historicalLength: number,
@@ -62,10 +78,29 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
       //   },
       //   body: JSON.stringify({
       //     timeSeriesData: saleHistory,
+      //     options: {
+      //       forecastHorizon: 30,
+      //     },
+      //   }),
+      // });
+
+      // const reqTrain2 = await fetch("http://localhost:5000/api/train", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     timeSeriesData: saleHistory,
+      //     options: {
+      //       forecastHorizon: 30,
+      //     },
       //   }),
       // });
       //
+      // const trainResult2 = await reqTrain2.json();
+
       // const trainResult = await reqTrain.json();
+
       // console.log("Train result: ", trainResult);
 
       // const lookbackWindow = 30;
@@ -81,10 +116,12 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
           recentData: saleHistory,
           // recentData,
           options: {
-            forecastHorizon: 7,
+            forecastHorizon: horizon,
           },
         }),
       });
+
+      console.log("HORIZON: ", horizon);
 
       const result = await req.json();
 
@@ -154,6 +191,19 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
     const forecastTrend =
       ((lastForecastValue - firstForecastValue) / firstForecastValue) * 100;
 
+    const totalQuantityOfForecast = forecastData.reduce((sum, val) =>
+      Math.floor(sum + val),
+    );
+    console.log("Quantity of forecast: ", totalQuantityOfForecast);
+    console.log("Stock of item: ", item.stock);
+
+    if (item.stock < totalQuantityOfForecast) {
+      setRestockStatus({
+        need: true,
+        quantity: Math.abs(totalQuantityOfForecast - Math.abs(item.stock)),
+      });
+    }
+
     return {
       overallChange: percentageChange, // Past vs Future
       immediateChange: immediateChange, // Last historical day vs first forecast
@@ -169,38 +219,76 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
   useEffect(() => {
     if (sales && sales.length > 1) {
       fetchForecast();
+      console.log("Horizon changed: ", horizon);
     }
-  }, [sales]);
+  }, [sales, horizon]);
 
-  if (isLoading) return <div className="bg-red-500">Loading</div>;
+  if (isLoading) return <Loading />;
 
   if (error) return <div className="text-destructive">{error}</div>;
 
   if (!saleHistory || !forecastedData || !chartLabels) {
     console.log(saleHistory, forecastedData, chartLabels);
     return (
-      <div>
-        Either of params cannot be undefined it is because sales length is not
-        enough: {sales.length}
+      <div className="mt-4 text-destructive text-center">
+        {/* Either of params cannot be undefined it is because sales length is not */}
+        {/* enough: {sales.length} */}
+        The item cannot be forecasted due to its history sale is not enough for
+        training the model.
       </div>
     );
   }
 
   return (
-    <div className="mt-3">
-      <ForecastGraph
-        saleHistory={saleHistory}
-        forecastedData={forecastedData}
-        labels={chartLabels}
+    <div className="mt-5 grid lg:flex gap-2">
+      <div className="lg:grow">
+        <div className="flex justify-between">
+          <div className="text-2xl font-bold mb-2">Forecast graph</div>
+
+          <Select
+            value={horizon.toString()}
+            onValueChange={(val) => {
+              console.log(val);
+              sethorizon(parseInt(val));
+            }}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select horizon" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Horizon</SelectLabel>
+                <SelectItem value="7">7 Days</SelectItem>
+                <SelectItem value="30">30 Days</SelectItem>
+                <SelectItem value="60">60 days</SelectItem>
+                <SelectItem value="90">80 dats</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <ForecastGraph
+          saleHistory={saleHistory}
+          forecastedData={forecastedData}
+          labels={chartLabels}
+          trendAnalysis={trendAnalysis}
+        />
+      </div>
+
+      <ForecastReport
+        restockStatus={restockStatus}
         trendAnalysis={trendAnalysis}
       />
+    </div>
+  );
+};
 
-      {/* <div className="mt-2"> */}
-      {/*   Overall Forecast vs Recent History:{" "} */}
-      {/*   {trendAnalysis!.overallChange.toFixed(2)} */}
-      {/*   Immediate Change (Next Day): {trendAnalysis!.immediateChange} */}
-      {/*   Forecast Trajectory (Week End vs Start): {trendAnalysis!.forecastTrend} */}
-      {/* </div> */}
+const Loading = () => {
+  return (
+    <div className="flex w-full h-[300px] mt-2 justify-center items-center">
+      <div className="flex flex-col gap-1 justify-center h-min items-center content-center">
+        <Loader2 className="animate-spin" />
+        Forecasting item...
+      </div>
     </div>
   );
 };

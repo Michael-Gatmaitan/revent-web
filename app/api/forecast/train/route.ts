@@ -3,6 +3,8 @@ import { trainModel } from "@/app/temp/forecastService";
 export const POST = async (req: Request) => {
   const data = await req.json();
 
+  console.log("DATA FGROM P{OST TRAIN", data);
+
   try {
     const { timeSeriesData, options } = data;
 

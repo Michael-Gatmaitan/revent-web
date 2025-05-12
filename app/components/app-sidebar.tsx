@@ -3,6 +3,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import AppIcon from "@/public/app_icon.png";
 import {
   Sidebar,
   SidebarContent,
@@ -16,16 +17,18 @@ import {
 } from "@/components/ui/sidebar";
 import { Label } from "@radix-ui/react-label";
 import {
+  ArrowLeftRight,
   ArrowUpFromDot,
+  BadgeDollarSign,
   CirclePlus,
   ScanQrCode,
   ShoppingBasket,
-  Smile,
   Star,
 } from "lucide-react";
 
 import Link from "next/link";
 import ToggleModes from "./mode-toggle";
+import Image from "next/image";
 
 const items = [
   {
@@ -64,9 +67,21 @@ const items = [
       },
       {
         id: 1,
-        title: "Forcasting",
+        title: "Forecasting",
         icon: Star,
         href: "/forecasting",
+      },
+      {
+        id: 2,
+        title: "Sales",
+        icon: BadgeDollarSign,
+        href: "/sales",
+      },
+      {
+        id: 3,
+        title: "Transactions",
+        icon: ArrowLeftRight,
+        href: "/transactions",
       },
     ],
   },
@@ -76,9 +91,10 @@ const AppSidebar = () => {
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
-        <div className="flex gap-2">
-          <Smile />
-          <div>Michael Gatmaitan</div>
+        <div className="flex gap-2 items-center">
+          {/* <Smile /> */}
+          <Image src={AppIcon} width={50} height={50} alt="App icon" />
+          <div className="font-bold text-3xl">Revent</div>
         </div>
       </SidebarHeader>
       <SidebarContent>

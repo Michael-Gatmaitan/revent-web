@@ -1,5 +1,3 @@
-// "use client";
-
 import createApolloClient from "@/lib/apollo-client";
 import { GET_ITEM_BY_ID, GET_ITEM_SALE_BY_ID } from "@/lib/gql";
 import ItemInfo from "./item-info";
@@ -8,7 +6,7 @@ import ForecastedData from "./forecasted-data";
 const getItemById = async (id: number) => {
   try {
     const client = createApolloClient();
-    const { data, loading, error } = await client.query({
+    const { data, error } = await client.query({
       query: GET_ITEM_BY_ID,
       variables: {
         productID: id,
@@ -60,13 +58,6 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div>
-      {/* Display product info */}
-      {/* {id} */}
-      {/**/}
-      {/* <div>Item from db</div> */}
-      {/* {item.productID} */}
-      {/* {item.itemName} */}
-
       {/* We can use the sale data for forecasting */}
       <ItemInfo sales={itemSaleById} item={item} />
 
