@@ -221,6 +221,7 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
       fetchForecast();
       console.log("Horizon changed: ", horizon);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sales, horizon]);
 
   if (isLoading) return <Loading />;

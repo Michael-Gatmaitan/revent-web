@@ -1,8 +1,8 @@
 "use client";
 import { useEffect } from "react";
-import { selectWholeData, setAsOut } from "@/lib/features/orderSlice";
+import { setAsOut } from "@/lib/features/orderSlice";
 import ItemCard from "../components/item-card";
-import { useAppSelector, useAppDispatch } from "@/lib/hook";
+import { useAppDispatch } from "@/lib/hook";
 import OutDialog from "../components/out-dialog";
 
 const Items = ({

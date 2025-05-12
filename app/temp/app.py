@@ -98,8 +98,8 @@ def train_model():
 
         print("HORIZON IN TRAIN: " + str(forecast_horizon))
         
-            time_series, 
         model, scaler = create_and_train_model(
+            time_series, 
             lookback=lookback,
             forecast_horizon=forecast_horizon,
             epochs=epochs

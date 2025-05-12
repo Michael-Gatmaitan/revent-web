@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 
-const QrDialog = ({ data }) => {
+const QrDialog = ({ data }: { data: object }) => {
   console.log("Data from QRCode generator: ", data);
   return (
     <Dialog>

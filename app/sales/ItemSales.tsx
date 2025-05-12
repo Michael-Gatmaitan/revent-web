@@ -5,10 +5,10 @@ interface IItemSales {
   item: Item;
 }
 
-const ItemSales = ({ item }: IItemSales) => {
+const ItemSales = async ({ item }: IItemSales) => {
   const { itemNumber } = item;
   const client = createApolloClient();
-  const { loading, data, error } = await client.query({
+  const { loading, data } = await client.query({
     query: GET_ITEM_SALE_BY_ID,
     variables: {
       itemNumber,
