@@ -23,7 +23,7 @@ const chartConfig = {
     color: "var(--chart-1)",
   },
   predicted: {
-    label: "Predicted",
+    label: "Predicted sale",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
@@ -33,6 +33,7 @@ interface IForecastedGraph {
   forecastedData: number[];
   labels: string[];
   trendAnalysis: ITrendAnalysis;
+  duration: string;
 }
 
 interface ISaleData {
@@ -46,6 +47,7 @@ export function ForecastGraph({
   forecastedData,
   labels,
   trendAnalysis,
+  duration,
 }: IForecastedGraph) {
   const [chartData, setChartData] = useState<ISaleData[]>([]);
 
@@ -144,7 +146,7 @@ export function ForecastGraph({
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="leading-none text-muted-foreground">
-          Showing forecasted sale in 7 days
+          Showing forecasted sale in {duration}
         </div>
       </CardFooter>
     </Card>

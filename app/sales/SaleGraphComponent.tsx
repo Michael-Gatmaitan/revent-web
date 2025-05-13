@@ -103,14 +103,11 @@ export function SaleGraphComponent({ saleGraph }: ISaleGraph) {
               dataKey="itemName"
               type="category"
               tickLine={false}
-              tickMargin={10}
+              // tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              // tickFormatter={(value) => value.slice(0, 3)}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Bar
               dataKey="totalRevenue"
               fill="var(--color-totalRevenue)"

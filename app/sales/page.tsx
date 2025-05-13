@@ -4,22 +4,7 @@ import TopSelling from "./TopSelling";
 import SaleGraphComponent from "./SaleGraphComponent";
 
 const SalesPage = async () => {
-  // const client = createApolloClient();
-  //
-  // const salesResult = await client.query({
-  //   query: GET_SALES,
-  // });
-  //
-  // if (salesResult.error) return <div>Failed to get sales.</div>;
-  //
-  // if (salesResult.loading) return <div>Loading...</div>;
-  //
-  // const { sales }: { sales: Sale[] } = salesResult.data;
-
-  // console.log(sales);
-  //
   const client = createApolloClient();
-
   const saleGraphResult = await client.query({
     query: GET_SALE_GRAPH,
   });
@@ -37,10 +22,9 @@ const SalesPage = async () => {
       <div className="text-md">Determine each product sales</div>
 
       <div className="mt-4 flex flex-col lg:flex-row grow gap-2">
-        <div className="lg:flex-3/4">
+        <div className="lg:flex-8/12">
           <SaleGraphComponent saleGraph={saleGraph} />
         </div>
-
         <div>
           <TopSelling />
         </div>

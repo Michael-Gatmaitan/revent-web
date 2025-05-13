@@ -57,11 +57,18 @@ const TopSelling = async () => {
                 <div>
                   <div className="font-bold">{topSale.itemName}</div>
                   <div className="text-xs">
-                    {topSale.total_quantity_sold} pcs sold
+                    {topSale.quantitySold
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                    pcs sold
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <div>{topSale.totalRevenue}</div>
+                  <div>
+                    {topSale.totalRevenue
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </div>
                 </div>
               </div>
             </div>

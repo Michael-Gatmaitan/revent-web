@@ -139,8 +139,17 @@ export const GET_SALE_GRAPH = gql`
       itemNumber
       itemName
       unitPrice
-      total_quantity_sold
+      quantitySold
       totalRevenue
+    }
+  }
+`;
+
+export const GET_MONTHLY_SALES = gql`
+  query MonthlySales {
+    monthlySales {
+      month
+      sale
     }
   }
 `;
@@ -149,7 +158,7 @@ export const GET_TOP_SALES = gql`
   query TopSales {
     topSales {
       saleID
-      total_quantity_sold
+      quantitySold
       unitPrice
       itemNumber
       itemName

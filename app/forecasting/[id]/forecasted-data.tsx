@@ -25,7 +25,9 @@ export type ITrendAnalysis = {
 } | null;
 
 const ForecastedData = ({ item, sales }: IForecastedData) => {
-  const [horizon, sethorizon] = useState<number>(7);
+  const [duration, setDuration] = useState<
+    "1 week" | "1 month" | "2 months" | "3 months"
+  >("1 week");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [saleHistory, setSaleHistory] = useState<number[]>();
@@ -69,65 +71,49 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
     console.log("Generating forecast for ", item.itemName);
     try {
       setIsLoading(true);
-      const saleHistory = sales.map((sale) => sale.quantity);
 
-      // const reqTrain = await fetch("http://localhost:3000/api/forecast/train", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     timeSeriesData: saleHistory,
-      //     options: {
-      //       forecastHorizon: 30,
-      //     },
-      //   }),
-      // });
-
-      // const reqTrain2 = await fetch("http://localhost:5000/api/train", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     timeSeriesData: saleHistory,
-      //     options: {
-      //       forecastHorizon: 30,
-      //     },
-      //   }),
-      // });
+      // TODO: Call api from :5000/predict
+      // TODO: body should be: {
+      // itemNumber: number | string,
+      // duration: "7days", "1 months", "2 months" "3 months"
+      // }
       //
-      // const trainResult2 = await reqTrain2.json();
+      // returns {
+      //  predictedQuantities: number[]
+      //  durationRequested: "1 month" ...
+      //  numOfDays: number
+      // }
 
-      // const trainResult = await reqTrain.json();
-
-      // console.log("Train result: ", trainResult);
-
-      // const lookbackWindow = 30;
-      // const recentData = sales.slice(-lookbackWindow);
-
-      // POST request for predict
-      const req = await fetch("http://localhost:3000/api/forecast/predict", {
+      const req = await fetch("http://localhost:5000/predict", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          recentData: saleHistory,
-          // recentData,
-          options: {
-            forecastHorizon: horizon,
-          },
+          itemNumber: item.itemNumber,
+          duration: duration,
         }),
       });
 
-      console.log("HORIZON: ", horizon);
+      const predictResult: {
+        saleHistory: number[];
+        durationRequested: string;
+        numOfDays: number;
+        predictedQuantities: number[];
+      } = await req.json();
 
-      const result = await req.json();
+      const { saleHistory, durationRequested, numOfDays, predictedQuantities } =
+        predictResult;
 
-      if (result.forecast) {
-        const forecast = result.forecast;
-        const labels = generateDateLabels(sales.length, result.forecast.length);
+      console.log("Some results: ", {
+        durationRequested,
+        numOfDays,
+        predictedQuantities,
+      });
+
+      if (predictResult.predictedQuantities) {
+        const forecast = predictResult.predictedQuantities;
+        const labels = generateDateLabels(sales.length, forecast.length);
         const trends = calculateTrendPercentage(saleHistory, forecast);
 
         setSaleHistory(saleHistory);
@@ -164,6 +150,13 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
       forecastData.length,
       historicalData.length,
     );
+
+    console.log(
+      "Gostorical and forecasted data in calculateTrendPercentage: ",
+      historicalData,
+      forecastData,
+    );
+
     const recentHistorical = historicalData.slice(-recentHistoricalPeriods);
 
     const avgHistorical =
@@ -192,7 +185,7 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
       ((lastForecastValue - firstForecastValue) / firstForecastValue) * 100;
 
     const totalQuantityOfForecast = forecastData.reduce((sum, val) =>
-      Math.floor(sum + val),
+      Math.round(sum + val),
     );
     console.log("Quantity of forecast: ", totalQuantityOfForecast);
     console.log("Stock of item: ", item.stock);
@@ -219,10 +212,10 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
   useEffect(() => {
     if (sales && sales.length > 1) {
       fetchForecast();
-      console.log("Horizon changed: ", horizon);
+      console.log("Horizon changed: ", duration);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sales, horizon]);
+  }, [sales, duration]);
 
   if (isLoading) return <Loading />;
 
@@ -247,22 +240,20 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
           <div className="text-2xl font-bold mb-2">Forecast graph</div>
 
           <Select
-            value={horizon.toString()}
-            onValueChange={(val) => {
-              console.log(val);
-              sethorizon(parseInt(val));
-            }}
+            // value={duration}
+            // defaultValue={duration}
+            onValueChange={(val: typeof duration) => setDuration(val)}
           >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select horizon" />
+              <SelectValue placeholder="Select duration" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Horizon</SelectLabel>
-                <SelectItem value="7">7 Days</SelectItem>
-                <SelectItem value="30">30 Days</SelectItem>
-                <SelectItem value="60">60 days</SelectItem>
-                <SelectItem value="90">80 dats</SelectItem>
+                <SelectLabel>Duration</SelectLabel>
+                <SelectItem value="7 days">7 Days</SelectItem>
+                <SelectItem value="1 month">30 Days</SelectItem>
+                <SelectItem value="2 months">60 days</SelectItem>
+                <SelectItem value="3 months">90 days</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -272,12 +263,14 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
           forecastedData={forecastedData}
           labels={chartLabels}
           trendAnalysis={trendAnalysis}
+          duration={duration}
         />
       </div>
 
       <ForecastReport
         restockStatus={restockStatus}
         trendAnalysis={trendAnalysis}
+        duration={duration}
       />
     </div>
   );

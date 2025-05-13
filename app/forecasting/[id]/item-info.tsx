@@ -45,14 +45,18 @@ const ItemInfo = ({ item, sales }: IItemInfo) => {
             <CircleDollarSign size={20} />
             Total sales
           </div>
-          <div className="text-3xl font-bold flex gap-2">₱ {totalSales}</div>
+          <div className="text-3xl font-bold flex gap-2">
+            ₱ {totalSales.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          </div>
         </div>
         <div className="bg-primary/50 rounded-md p-3 grid gap-2">
           <div className="text-sm font-medium flex gap-1 items-center">
             <DollarSign size={20} />
             Price
           </div>
-          <div className="text-3xl font-bold flex gap-2">₱ {unitPrice}</div>
+          <div className="text-3xl font-bold flex gap-2">
+            ₱ {unitPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          </div>
         </div>
         <div className="bg-primary/25 rounded-md p-3 grid gap-2">
           <div className="text-sm font-medium flex gap-1 items-center">

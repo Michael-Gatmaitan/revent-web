@@ -31,9 +31,14 @@ interface SaleGraph {
   totalRevenue: number;
 }
 
+interface MonthlySales {
+  month: number;
+  sale: number;
+}
+
 interface TopSales {
   saleID: number;
-  total_quantity_sold: number;
+  quantitySold: number;
   unitPrice: number;
   itemNumber: string;
   itemName: string;

@@ -126,7 +126,9 @@ const ItemCard = ({
         <div className="flex w-full justify-between">
           <div className="grid gap-2">
             <div className="font-bold text-xl">{item.itemName}</div>
-            <div>P{item.unitPrice}</div>
+            <div>
+              P{item.unitPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            </div>
           </div>
 
           <div className="grid gap-2 text-right">

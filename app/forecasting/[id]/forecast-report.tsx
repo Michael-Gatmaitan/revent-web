@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 interface IForecastReport {
   restockStatus: { need: boolean; quantity: number };
   trendAnalysis: ITrendAnalysis;
+  duration: string
 }
 
-const ForecastReport = ({ restockStatus, trendAnalysis }: IForecastReport) => {
+const ForecastReport = ({ restockStatus, trendAnalysis, duration }: IForecastReport) => {
   console.log("RESTOCK STATUS: ", restockStatus);
   if (!trendAnalysis) return <div>Trend analysis is null</div>;
 
@@ -31,7 +32,7 @@ const ForecastReport = ({ restockStatus, trendAnalysis }: IForecastReport) => {
             ) : (
               <TrendingDown className="h-4 w-4" />
             )}
-            in next 7 days
+            in next {duration}
           </div>
         </div>
 
@@ -65,7 +66,7 @@ const ForecastReport = ({ restockStatus, trendAnalysis }: IForecastReport) => {
             ) : (
               <TrendingDown className="h-4 w-4" />
             )}
-            in next 7 days
+            in next {duration}
           </div>
         </div>
 
