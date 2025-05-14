@@ -250,7 +250,7 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Duration</SelectLabel>
-                <SelectItem value="7 days">7 Days</SelectItem>
+                <SelectItem value="1 week">1 week</SelectItem>
                 <SelectItem value="1 month">30 Days</SelectItem>
                 <SelectItem value="2 months">60 days</SelectItem>
                 <SelectItem value="3 months">90 days</SelectItem>
@@ -271,6 +271,7 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
         restockStatus={restockStatus}
         trendAnalysis={trendAnalysis}
         duration={duration}
+        itemNumber={item.itemNumber}
       />
     </div>
   );

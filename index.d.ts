@@ -1,6 +1,6 @@
 interface Item {
   productID: number;
-  itemNumber: number;
+  itemNumber: string;
   itemName: string;
   discount: Float!;
   stock: number;
@@ -32,7 +32,7 @@ interface SaleGraph {
 }
 
 interface MonthlySales {
-  month: number;
+  month: string;
   sale: number;
 }
 

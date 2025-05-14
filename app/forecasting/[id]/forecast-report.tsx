@@ -1,15 +1,23 @@
 import { ThumbsUp, TrendingDown, TrendingUp } from "lucide-react";
 import { ITrendAnalysis } from "./forecasted-data";
 import { Button } from "@/components/ui/button";
+import MonthlySalesGraph from "./monthly-sales-graph";
 
 interface IForecastReport {
   restockStatus: { need: boolean; quantity: number };
   trendAnalysis: ITrendAnalysis;
-  duration: string
+  duration: string;
+  itemNumber: string;
 }
 
-const ForecastReport = ({ restockStatus, trendAnalysis, duration }: IForecastReport) => {
+const ForecastReport = ({
+  restockStatus,
+  trendAnalysis,
+  duration,
+  itemNumber,
+}: IForecastReport) => {
   console.log("RESTOCK STATUS: ", restockStatus);
+  console.log(itemNumber);
   if (!trendAnalysis) return <div>Trend analysis is null</div>;
 
   const { overallChange, immediateChange, forecastTrend } = trendAnalysis;
@@ -98,45 +106,7 @@ const ForecastReport = ({ restockStatus, trendAnalysis, duration }: IForecastRep
         </div>
       </div>
 
-      {/* <div className="flex gap-2 font-medium leading-none"> */}
-      {/*   {overallChange > 0 ? ( */}
-      {/*     <TrendingUp className="h-4 w-4" /> */}
-      {/*   ) : ( */}
-      {/*     <TrendingDown className="h-4 w-4" /> */}
-      {/*   )} */}
-      {/* Trending {overallChange > 0 ? "up" : "down"} by{" "} */}
-      {/*   {overallChange.toFixed(2)}% in next 7 days */}
-      {/* </div> */}
-      {/**/}
-      {/* <div className="flex gap-2 font-medium leading-none"> */}
-      {/*   {immediateChange > 0 ? ( */}
-      {/*     <TrendingUp className="h-4 w-4" /> */}
-      {/*   ) : ( */}
-      {/*     <TrendingDown className="h-4 w-4" /> */}
-      {/*   )} */}
-      {/*   Immediate change (Next day) {immediateChange > 0 ? "up" : "down"} by{" "} */}
-      {/*   {immediateChange.toFixed(2)}% */}
-      {/* </div> */}
-      {/**/}
-      {/* <div className="flex gap-2 font-medium leading-none"> */}
-      {/*   {forecastTrend > 0 ? ( */}
-      {/*     <TrendingUp className="h-4 w-4" /> */}
-      {/*   ) : ( */}
-      {/*     <TrendingDown className="h-4 w-4" /> */}
-      {/*   )} */}
-      {/*   Start vs End of forecasted data: {forecastTrend.toFixed(2)}% */}
-      {/* </div> */}
-      {/**/}
-      {/* <div className="leading-none text-muted-foreground"> */}
-      {/*   Showing total visitors for the last 6 months */}
-      {/* </div> */}
-
-      {/* <div className="mt-2"> */}
-      {/*   Overall Forecast vs Recent History:{" "} */}
-      {/*   {trendAnalysis!.overallChange.toFixed(2)} */}
-      {/*   Immediate Change (Next Day): {trendAnalysis!.immediateChange} */}
-      {/*   Forecast Trajectory (Week End vs Start): {trendAnalysis!.forecastTrend} */}
-      {/* </div> */}
+      <MonthlySalesGraph itemNumber={itemNumber} />
     </div>
   );
 };

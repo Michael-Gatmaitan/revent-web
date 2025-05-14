@@ -154,6 +154,15 @@ export const GET_MONTHLY_SALES = gql`
   }
 `;
 
+export const GET_MONTHLY_SALES_BY_ITEM_NUMBER = gql`
+  query MonthlySalesByItemNumber($itemNumber: String!) {
+    monthlySaleByItemNumber(itemNumber: $itemNumber) {
+      month
+      sale
+    }
+  }
+`;
+
 export const GET_TOP_SALES = gql`
   query TopSales {
     topSales {

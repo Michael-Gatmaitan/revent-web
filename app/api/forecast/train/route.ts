@@ -1,5 +1,3 @@
-import { trainModel } from "@/app/temp/forecastService";
-
 export const POST = async (req: Request) => {
   const data = await req.json();
 
