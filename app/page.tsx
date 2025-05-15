@@ -24,5 +24,10 @@ export default function Home() {
   // }, []);
 
   // console.log(data);
-  return <div>Hello</div>;
+  return (
+    <div>
+      <div className="text-3xl font-bold">R</div>
+      <div className="text-md">Determine each product sales</div>
+    </div>
+  );
 }

@@ -29,9 +29,6 @@ const SalesPage = async () => {
           <TopSelling />
         </div>
       </div>
-      {/* {items.map((item) => ( */}
-      {/*   <div>{item.itemName}</div> */}
-      {/* ))} */}
     </div>
   );
 };

@@ -95,13 +95,6 @@ const ForecastReport = ({
                 <ThumbsUp className="h-4 w-4" /> Item is safe{" "}
               </>
             )}
-
-            {/* {immediateChange > 0 ? ( */}
-            {/*   <TrendingUp className="h-4 w-4" /> */}
-            {/* ) : ( */}
-            {/*   <TrendingDown className="h-4 w-4" /> */}
-            {/* )} */}
-            {/* in next 7 days */}
           </div>
         </div>
       </div>

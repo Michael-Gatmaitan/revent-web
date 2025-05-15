@@ -265,6 +265,15 @@ const ForecastedData = ({ item, sales }: IForecastedData) => {
           trendAnalysis={trendAnalysis}
           duration={duration}
         />
+
+        <div className="w-full mt-2 grid lg:flex gap-2">
+          <div className="bg-secondary rounded-sm grow p-2">
+            Longer history sale can have better future predictions.
+          </div>
+          <div className="bg-secondary rounded-sm grow p-2">
+            More days to predict can lead to less accurate results.
+          </div>
+        </div>
       </div>
 
       <ForecastReport
