@@ -1,4 +1,3 @@
-// "use server";
 import Items from "@/app/items/items";
 import createApolloClient from "@/lib/apollo-client";
 import { GET_ITEMS } from "@/lib/gql";
@@ -21,5 +20,7 @@ const OutPage = async () => {
     </div>
   );
 };
+
+export const dynamic = "force-dynamic";
 
 export default OutPage;
